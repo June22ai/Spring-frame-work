@@ -17,6 +17,7 @@ import jp.co.sysystem.springWorkout.domain.jooqObject.tables.records.UserdetailR
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
@@ -43,7 +44,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Userdetail extends TableImpl<UserdetailRecord> {
 
-    private static final long serialVersionUID = -496640694;
+    private static final long serialVersionUID = -1273482620;
 
     /**
      * The reference instance of <code>workout.userdetail</code>
@@ -61,7 +62,7 @@ public class Userdetail extends TableImpl<UserdetailRecord> {
     /**
      * The column <code>workout.userdetail.NO</code>.
      */
-    public final TableField<UserdetailRecord, String> NO = createField(DSL.name("NO"), org.jooq.impl.SQLDataType.VARCHAR(5).nullable(false), this, "");
+    public final TableField<UserdetailRecord, Integer> NO = createField(DSL.name("NO"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>workout.userdetail.ID</code>.
@@ -118,7 +119,12 @@ public class Userdetail extends TableImpl<UserdetailRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.USERDETAIL_PRIMARY);
+        return Arrays.<Index>asList(Indexes.USERDETAIL_ID, Indexes.USERDETAIL_PRIMARY);
+    }
+
+    @Override
+    public Identity<UserdetailRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USERDETAIL;
     }
 
     @Override
@@ -128,7 +134,7 @@ public class Userdetail extends TableImpl<UserdetailRecord> {
 
     @Override
     public List<UniqueKey<UserdetailRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserdetailRecord>>asList(Keys.KEY_USERDETAIL_PRIMARY);
+        return Arrays.<UniqueKey<UserdetailRecord>>asList(Keys.KEY_USERDETAIL_PRIMARY, Keys.KEY_USERDETAIL_ID);
     }
 
     @Override
@@ -162,7 +168,7 @@ public class Userdetail extends TableImpl<UserdetailRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, Timestamp, String> fieldsRow() {
+    public Row4<Integer, String, Timestamp, String> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

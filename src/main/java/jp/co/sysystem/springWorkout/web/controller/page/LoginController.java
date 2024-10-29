@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jp.co.sysystem.springWorkout.service.LoginService;
 import jp.co.sysystem.springWorkout.util.MessageUtil;
 import jp.co.sysystem.springWorkout.web.form.LoginForm;
+import jp.co.sysystem.springWorkout.web.form.SearchForm;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableAutoConfiguration
 @Slf4j
 public class LoginController {
-
+  //準備
   @Autowired
   HttpSession session;
 
@@ -50,10 +51,11 @@ public class LoginController {
    */
   @RequestMapping(value = LOGIN_FORM_URL, method = RequestMethod.GET)
   public String showLoginPage(HttpServletRequest request, Model model) {
-    // ログインフォームを格納
-    model.addAttribute("LoginForm", new LoginForm());
-
+    // ログインフォームを格納new LoginForm()を作成して、ログインフォームを格納する
+    model.addAttribute("loginForm", new LoginForm());
+    // model.addAttributeでどういう仕組みで何が行われているか理解する
     return LOGIN_PAGE;
+    //login.htmlが表示される
   }
 
   /**
@@ -66,33 +68,53 @@ public class LoginController {
    */
   @RequestMapping(value = LOGIN_PROCESS_URL, method = RequestMethod.POST)
   public String processLogin(
+      //入力チェックを行いたい引数LoginFormオブジェクトの前に@Validatedを設定
       @Validated @ModelAttribute LoginForm form,
+      //入力チェック(Validation)の結果は、BindingResultオブジェクトに格納。
+      //processLoginメソッドの引数として渡される。
       BindingResult bindingResult,
       Model model) {
 
-    // BeanValidationの結果確認
+    //bindingResultオブジェクトを使って入力チェックの結果確認
+    //Validation：入力内容や記述内容が要件を満たしているか妥当性をチェック
     if (bindingResult.hasErrors()) {
       // TODO: ログインフォームからの入力値確認結果にエラーがある場合の処理
-
       // エラーメッセージをリソースファイルから取得
       String msg = msgutil.getMessage("login.failure");
       log.debug(msg);
       // エラーメッセージを画面に表示する
       model.addAttribute("msg", msg);
 
-      // ログインに失敗したら、もう一度ログイン画面
+      // ログインに失敗したら、もう一度ログイン画面を表示
       // ログインフォームを格納
-      model.addAttribute("LoginForm", form);
+      model.addAttribute("loginForm", form);
       return LOGIN_PAGE;
     }
 
     // ログインユーザー情報の正当性判定
     if (null == login.checkLoginUser(form.getId(), form.getPassword())) {
-      // TODO: エラー処理
+      // エラーメッセージをリソースファイルから取得
+      String msg = msgutil.getMessage("login.failure");
+      log.debug(msg);
+      // エラーメッセージを画面に表示する
+      //Thymeleafを導入したHTMLにサーバーから送ったデータを表示させるには、
+      //Spring FrameworkのModelクラスにあるaddAttributeメソッドを使用する
+      model.addAttribute("msg", msg);
+
+      // ログインフォームを格納(ログインに失敗した場合)
+      model.addAttribute("loginForm", form);
+      return LOGIN_PAGE;
     }
 
-    // TODO: リダイレクトする様に処理を変更する
-    return "遷移先画面の指定";
+    //ログインフォームをセッションに保存
+    session.setAttribute("loginForm", form);
+    //サーチフォームを格納 search.htmlにあるth:object="${searchForm}"で利用
+    //new SearchForm())⇒何も入っていない空のSearchFormを作っている
+    model.addAttribute("searchForm", new SearchForm());
+    // ログインフォームを格納(ログイン成功時の処理)
+    model.addAttribute("loginForm", new LoginForm());
+    //遷移先画面の指定
+    return "page/search";
   }
 
   /**
@@ -105,7 +127,7 @@ public class LoginController {
     // 既存セッションを削除
     session.invalidate();
     // 遷移先のログイン画面で使用する空のForm
-    model.addAttribute("LoginForm", new LoginForm());
+    model.addAttribute("loginForm", new LoginForm());
     return LOGIN_PAGE;
   }
 }

@@ -32,6 +32,7 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     public static final Index USER_PRIMARY = Indexes0.USER_PRIMARY;
+    public static final Index USERDETAIL_ID = Indexes0.USERDETAIL_ID;
     public static final Index USERDETAIL_PRIMARY = Indexes0.USERDETAIL_PRIMARY;
 
     // -------------------------------------------------------------------------
@@ -40,6 +41,7 @@ public class Indexes {
 
     private static class Indexes0 {
         public static Index USER_PRIMARY = Internal.createIndex("PRIMARY", User.USER, new OrderField[] { User.USER.ID }, true);
+        public static Index USERDETAIL_ID = Internal.createIndex("ID", Userdetail.USERDETAIL, new OrderField[] { Userdetail.USERDETAIL.ID }, true);
         public static Index USERDETAIL_PRIMARY = Internal.createIndex("PRIMARY", Userdetail.USERDETAIL, new OrderField[] { Userdetail.USERDETAIL.NO }, true);
     }
 }

@@ -11,6 +11,7 @@ import jp.co.sysystem.springWorkout.domain.jooqObject.tables.Userdetail;
 import jp.co.sysystem.springWorkout.domain.jooqObject.tables.records.UserRecord;
 import jp.co.sysystem.springWorkout.domain.jooqObject.tables.records.UserdetailRecord;
 
+import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
 
@@ -33,6 +34,7 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<UserdetailRecord, Integer> IDENTITY_USERDETAIL = Identities0.IDENTITY_USERDETAIL;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -40,6 +42,7 @@ public class Keys {
 
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
     public static final UniqueKey<UserdetailRecord> KEY_USERDETAIL_PRIMARY = UniqueKeys0.KEY_USERDETAIL_PRIMARY;
+    public static final UniqueKey<UserdetailRecord> KEY_USERDETAIL_ID = UniqueKeys0.KEY_USERDETAIL_ID;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -50,8 +53,13 @@ public class Keys {
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
+    private static class Identities0 {
+        public static Identity<UserdetailRecord, Integer> IDENTITY_USERDETAIL = Internal.createIdentity(Userdetail.USERDETAIL, Userdetail.USERDETAIL.NO);
+    }
+
     private static class UniqueKeys0 {
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = Internal.createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
         public static final UniqueKey<UserdetailRecord> KEY_USERDETAIL_PRIMARY = Internal.createUniqueKey(Userdetail.USERDETAIL, "KEY_userdetail_PRIMARY", Userdetail.USERDETAIL.NO);
+        public static final UniqueKey<UserdetailRecord> KEY_USERDETAIL_ID = Internal.createUniqueKey(Userdetail.USERDETAIL, "KEY_userdetail_ID", Userdetail.USERDETAIL.ID);
     }
 }

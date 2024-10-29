@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jp.co.sysystem.springWorkout.domain.jooqRepository.LoginUserJooqRepository;
 import jp.co.sysystem.springWorkout.domain.repository.LoginUserRepository;
 import jp.co.sysystem.springWorkout.domain.table.User;
+import jp.co.sysystem.springWorkout.web.form.UserForm;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,9 +59,26 @@ public class LoginService {
     User u = jrep.findById(loginId);
     if (null != u) {
       // TODO: ユーザーが取得できた場合、パスワードの検証
+      if (u.getPass().equals(password)) {
+        return u;
+      }
     } else {
       // TODO: 存在しないログインIDだった場合
       log.warn(String.format("指定されたIDは存在しませんでした。[id:%s]", loginId));
+    }
+    return null;
+  }
+//ユーザー情報を取得するためのメソッド
+  public UserForm getUserData(@NonNull String loginId) {
+    User u = jrep.findById(loginId);
+    if (u != null) {
+      UserForm userForm = new UserForm();
+      userForm.setId(u.getId());
+      userForm.setName(u.getName());
+      userForm.setKana(u.getKana());
+      //userForm.setBirth(u.getBirth());
+      //userForm.setClub(u.getClub());
+      return userForm;
     }
     return null;
   }

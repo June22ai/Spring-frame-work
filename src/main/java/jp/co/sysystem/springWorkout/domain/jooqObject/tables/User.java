@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -1548897223;
+    private static final long serialVersionUID = 1383958296;
 
     /**
      * The reference instance of <code>workout.user</code>
@@ -64,7 +64,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>workout.user.PASS</code>.
      */
-    public final TableField<UserRecord, String> PASS = createField(DSL.name("PASS"), org.jooq.impl.SQLDataType.VARCHAR(8), this, "");
+    public final TableField<UserRecord, String> PASS = createField(DSL.name("PASS"), org.jooq.impl.SQLDataType.VARCHAR(8).nullable(false), this, "");
 
     /**
      * The column <code>workout.user.NAME</code>.

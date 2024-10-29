@@ -139,3 +139,9 @@ body, html {
 .forgot-password:focus{
     color: rgb(12, 97, 33);
 }
+
+h1 {
+  font-weight: bold;
+  text-align: center;
+  color: RGBa(255,255,255,0.7);
+}
